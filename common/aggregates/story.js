@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken'
+
 // @flow
 import {
   STORY_CREATED,
@@ -23,9 +25,12 @@ export default {
     createStory: (
       state: any,
       command: any,
-      getJwtValue: any
+      jwtToken: any
     ): RawEvent<StoryCreated> => {
-      const { id: userId, name: userName } = getJwtValue()
+      const { id: userId, name: userName } = jwt.verify(
+        jwtToken,
+        process.env.JWT_SECRET || 'DefaultSecret'
+      )
       validate.stateIsAbsent(state, 'Story')
 
       const { title, link, text } = command.payload
@@ -41,9 +46,12 @@ export default {
     upvoteStory: (
       state: any,
       command: any,
-      getJwtValue: any
+      jwtToken: any
     ): RawEvent<StoryUpvoted> => {
-      const { id: userId } = getJwtValue()
+      const { id: userId } = jwt.verify(
+        jwtToken,
+        process.env.JWT_SECRET || 'DefaultSecret'
+      )
 
       validate.stateExists(state, 'Story')
       validate.itemIsNotInArray(state.voted, userId, 'User already voted')
@@ -54,9 +62,12 @@ export default {
     unvoteStory: (
       state: any,
       command: any,
-      getJwtValue: any
+      jwtToken: any
     ): RawEvent<StoryUnvoted> => {
-      const { id: userId } = getJwtValue()
+      const { id: userId } = jwt.verify(
+        jwtToken,
+        process.env.JWT_SECRET || 'DefaultSecret'
+      )
 
       validate.stateExists(state, 'Story')
       validate.itemIsInArray(state.voted, userId, 'User did not vote')
@@ -67,9 +78,12 @@ export default {
     commentStory: (
       state: any,
       command: any,
-      getJwtValue: any
+      jwtToken: any
     ): RawEvent<StoryCommented> => {
-      const { id: userId, name: userName } = getJwtValue()
+      const { id: userId, name: userName } = jwt.verify(
+        jwtToken,
+        process.env.JWT_SECRET || 'DefaultSecret'
+      )
       validate.stateExists(state, 'Story')
 
       const { commentId, parentId, text } = command.payload
