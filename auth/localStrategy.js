@@ -23,6 +23,16 @@ export default {
     passwordField: 'username',
     successRedirect: null
   },
+  routes: {
+    register: {
+      path: '/register',
+      method: 'POST'
+    },
+    login: {
+      path: '/login',
+      method: 'POST'
+    }
+  },
   registerCallback: async ({ resolve, body }, username, password) => {
     const executeQuery = resolve.queryExecutors.graphql
 

@@ -1,7 +1,8 @@
 import path from 'path'
+import { Strategy as LocalStrategy } from 'passport-local'
 import busAdapter from 'resolve-bus-memory'
 import storageAdapter from 'resolve-storage-lite'
-import localStrategy from 'resolve-scripts/dist/server/auth/localStrategy'
+import resolveAuth from 'resolve-scripts/dist/server/auth'
 import aggregates from './common/aggregates'
 import readModels from './common/read-models'
 import viewModels from './common/view-models'
@@ -43,6 +44,6 @@ export default {
   viewModels,
   jwtCookie,
   auth: {
-    strategies: [localStrategy(localStrategyParams)]
+    strategies: [resolveAuth(LocalStrategy, localStrategyParams)]
   }
 }
